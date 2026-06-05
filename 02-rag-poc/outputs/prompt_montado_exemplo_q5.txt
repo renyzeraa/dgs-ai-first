@@ -1,0 +1,63 @@
+Você é o Assistente de Atendimento da NovaTech (logística). Seu único papel é responder
+dúvidas operacionais dos ATENDENTES com base EXCLUSIVAMENTE nos trechos de documentação
+fornecidos no bloco CONTEXTO. Você não tem conhecimento próprio sobre a NovaTech.
+
+REGRAS (inquebráveis):
+1. Use SOMENTE informação presente no CONTEXTO. Não complete lacunas com conhecimento geral.
+2. Nunca invente prazos, valores, multiplicadores, tiers ou nomes de setor.
+3. Se a informação não estiver no CONTEXTO, diga: "Não encontrei essa informação na
+   documentação disponível." e sugira escalar ao supervisor. Não tente adivinhar.
+4. Se o CONTEXTO só tiver PARTE do necessário (ex.: o multiplicador mas não a tarifa-base),
+   responda o que há e declare explicitamente o que falta.
+5. Prioridade entre fontes conflitantes: versão mais recente vence (compare as datas/versões
+   no breadcrumb). Documento normativo/contratual > FAQ informal. Em conflito relevante,
+   mostre ambas as versões com a data e sinalize.
+6. Distinga REGRA de EXCEÇÃO: se algo é listado como exceção, não o apresente como permitido.
+7. Toda afirmação deve citar a fonte no formato (DOC-ID vX, Seção N).
+8. Responda em português formal, claro e objetivo.
+
+FORMATO:
+- Resposta direta (1-3 frases).
+- Fonte(s) citada(s).
+- Se aplicável: ressalva / o que falta / a quem escalar.
+
+
+[CONTEXTO — trechos recuperados]
+--- Fonte: PROC-042 v1.0 (Seção 3; tipo=procedimento; data=03/03/2023; score=0.210) ---
+[PROC-042 v1.0 — PROC-042 — Procedimento de Cálculo de Frete Especial | Seção 3 Prazo de entrega para frete especial]
+O prazo de entrega para frete especial é calculado como o prazo padrão da rota + 2 dias úteis adicionais para manuseio de carga pesada.
+
+--- Fonte: PROC-042 v1.0 (Seção 1; tipo=procedimento; data=03/03/2023; score=0.182) ---
+[PROC-042 v1.0 — PROC-042 — Procedimento de Cálculo de Frete Especial | Seção 1 Objetivo]
+Definir a fórmula e os parâmetros para cálculo de frete especial aplicável a cargas com peso acima de 500kg.
+
+--- Fonte: PROC-042-v2 v2.0 (Seção 3; tipo=procedimento; data=10/11/2023; score=0.178) ---
+[PROC-042-v2 v2.0 — PROC-042-v2 — Procedimento de Cálculo de Frete Especial (Revisado) | Seção 3 Prazo de entrega para frete especial]
+O prazo de entrega para frete especial é calculado como o prazo padrão da rota + 3 dias úteis adicionais para manuseio e roteirização de carga pesada (anteriormente era + 2 dias na versão anterior).
+
+--- Fonte: PROC-042 v1.0 (Seção 2; tipo=procedimento; data=03/03/2023; score=0.142) ---
+[PROC-042 v1.0 — PROC-042 — Procedimento de Cálculo de Frete Especial | Seção 2 Fórmula de cálculo]
+O frete especial é calculado como:
+
+Valor do frete = Valor base × Multiplicador regional × Fator de peso
+
+Onde:
+- Valor base = tarifa publicada na tabela mensal de fretes.
+- Multiplicador regional = fator aplicado conforme a região de destino (seção 2.1).
+- Fator de peso = 1.0 para cargas de 500kg a 1.000kg; 1.2 para cargas de 1.001kg a 3.000kg; 1.5 para cargas acima de 3.000kg.
+
+--- Fonte: PROC-042-v2 v2.0 (Seção 2; tipo=procedimento; data=10/11/2023; score=0.137) ---
+[PROC-042-v2 v2.0 — PROC-042-v2 — Procedimento de Cálculo de Frete Especial (Revisado) | Seção 2 Fórmula de cálculo]
+O frete especial é calculado como:
+
+Valor do frete = Valor base × Multiplicador regional × Fator de peso
+
+Onde:
+- Valor base = tarifa publicada na tabela mensal de fretes.
+- Multiplicador regional = fator aplicado conforme a região de destino (seção 2.1).
+- Fator de peso = 1.0 para cargas de 500kg a 1.000kg; 1.15 para cargas de 1.001kg a 3.000kg; 1.4 para cargas acima de 3.000kg.
+
+[PERGUNTA DO ATENDENTE]
+Quanto custa o frete para 600kg para Manaus?
+
+[RESPOSTA]
