@@ -1,0 +1,332 @@
+[
+  {
+    "q": "Qual o prazo de devolução?",
+    "status": "PARCIAL",
+    "covered": "1/2",
+    "trap": null,
+    "retrieved": [
+      [
+        "PROC-042",
+        "3",
+        0.239
+      ],
+      [
+        "POL-001",
+        "3.5",
+        0.226
+      ],
+      [
+        "PROC-042-v2",
+        "3",
+        0.203
+      ],
+      [
+        "POL-001",
+        "3.1",
+        0.18
+      ],
+      [
+        "POL-001",
+        "3.3",
+        0.175
+      ]
+    ]
+  },
+  {
+    "q": "Posso devolver carga perigosa?",
+    "status": "MISS",
+    "covered": "0/1",
+    "trap": "regra vs excecao (NAO pode)",
+    "retrieved": [
+      [
+        "FAQ",
+        "Item 3",
+        0.188
+      ],
+      [
+        "SLA-2024",
+        "3",
+        0.092
+      ],
+      [
+        "FAQ",
+        "Item 32",
+        0.09
+      ],
+      [
+        "FAQ",
+        "Item 45",
+        0.061
+      ],
+      [
+        "POL-001",
+        "3.4",
+        0.049
+      ]
+    ]
+  },
+  {
+    "q": "Qual o SLA do cliente Gold?",
+    "status": "MISS",
+    "covered": "0/1",
+    "trap": null,
+    "retrieved": [
+      [
+        "SLA-2024",
+        "5",
+        0.278
+      ],
+      [
+        "SLA-2024",
+        "4",
+        0.255
+      ],
+      [
+        "FAQ",
+        "Item 41",
+        0.206
+      ],
+      [
+        "SLA-2024",
+        "1",
+        0.178
+      ],
+      [
+        "SLA-2024",
+        "3",
+        0.169
+      ]
+    ]
+  },
+  {
+    "q": "Qual o SLA do cliente Platinum?",
+    "status": "MISS",
+    "covered": "0/1",
+    "trap": "tier inexistente (alucinacao)",
+    "retrieved": [
+      [
+        "FAQ",
+        "Item 15",
+        0.208
+      ],
+      [
+        "SLA-2024",
+        "5",
+        0.182
+      ],
+      [
+        "SLA-2024",
+        "4",
+        0.167
+      ],
+      [
+        "SLA-2024",
+        "3",
+        0.134
+      ],
+      [
+        "FAQ",
+        "Item 41",
+        0.128
+      ]
+    ]
+  },
+  {
+    "q": "Quanto custa o frete para 600kg para Manaus?",
+    "status": "PARCIAL",
+    "covered": "1/2",
+    "trap": "v1 vs v2 (contradicao) + tarifa-base ausente",
+    "retrieved": [
+      [
+        "PROC-042",
+        "3",
+        0.21
+      ],
+      [
+        "PROC-042",
+        "1",
+        0.182
+      ],
+      [
+        "PROC-042-v2",
+        "3",
+        0.178
+      ],
+      [
+        "PROC-042",
+        "2",
+        0.142
+      ],
+      [
+        "PROC-042-v2",
+        "2",
+        0.137
+      ]
+    ]
+  },
+  {
+    "q": "Quanto custa o frete para 300kg para Salvador?",
+    "status": "OK (esperado: SEM cobertura)",
+    "covered": "n/a",
+    "trap": "sem cobertura (<500kg nao documentado)",
+    "retrieved": [
+      [
+        "PROC-042",
+        "3",
+        0.21
+      ],
+      [
+        "PROC-042",
+        "1",
+        0.182
+      ],
+      [
+        "PROC-042-v2",
+        "3",
+        0.178
+      ],
+      [
+        "PROC-042",
+        "2",
+        0.142
+      ],
+      [
+        "PROC-042-v2",
+        "2",
+        0.137
+      ]
+    ]
+  },
+  {
+    "q": "O que acontece com carga danificada em trânsito?",
+    "status": "HIT",
+    "covered": "1/1",
+    "trap": "fonte so no FAQ informal",
+    "retrieved": [
+      [
+        "FAQ",
+        "Item 38",
+        0.283
+      ],
+      [
+        "POL-001",
+        "2",
+        0.062
+      ],
+      [
+        "POL-001",
+        "3.5",
+        0.059
+      ],
+      [
+        "FAQ",
+        "Item 27",
+        0.05
+      ],
+      [
+        "FAQ",
+        "Item 22",
+        0.031
+      ]
+    ]
+  },
+  {
+    "q": "Posso enviar carga perigosa com frete expresso?",
+    "status": "HIT",
+    "covered": "1/1",
+    "trap": "fonte so no FAQ informal",
+    "retrieved": [
+      [
+        "FAQ",
+        "Item 32",
+        0.372
+      ],
+      [
+        "SLA-2024",
+        "3",
+        0.069
+      ],
+      [
+        "FAQ",
+        "Item 3",
+        0.067
+      ],
+      [
+        "FAQ",
+        "Item 45",
+        0.054
+      ],
+      [
+        "PROC-042",
+        "3",
+        0.048
+      ]
+    ]
+  },
+  {
+    "q": "Qual o multiplicador de frete para o Sudeste?",
+    "status": "HIT",
+    "covered": "1/1",
+    "trap": "v1 (1.0) vs v2 (1.1) contradicao",
+    "retrieved": [
+      [
+        "PROC-042",
+        "2.1",
+        0.252
+      ],
+      [
+        "PROC-042-v2",
+        "2.1",
+        0.204
+      ],
+      [
+        "PROC-042",
+        "2",
+        0.147
+      ],
+      [
+        "PROC-042-v2",
+        "2",
+        0.142
+      ],
+      [
+        "PROC-042",
+        "3",
+        0.079
+      ]
+    ]
+  },
+  {
+    "q": "Qual o prazo de devolução, posso devolver carga perigosa e quanto custa frete pesado?",
+    "status": "MISS",
+    "covered": "0/4",
+    "trap": "multi-dominio",
+    "retrieved": [
+      [
+        "FAQ",
+        "Item 3",
+        0.17
+      ],
+      [
+        "PROC-042",
+        "3",
+        0.15
+      ],
+      [
+        "POL-001",
+        "3.5",
+        0.129
+      ],
+      [
+        "PROC-042-v2",
+        "3",
+        0.127
+      ],
+      [
+        "FAQ",
+        "Item 32",
+        0.091
+      ]
+    ]
+  }
+]
