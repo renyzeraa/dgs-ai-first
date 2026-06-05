@@ -1,0 +1,41 @@
+# ============================================================
+# .gitignore — Projeto RAG NovaTech (Fase 1 / Desenvolvedor)
+# ============================================================
+
+# --- Python: cache e bytecode (gerado automaticamente) ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Ambiente virtual (cada um cria o seu localmente) ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Vector store local do ChromaDB (gerado ao rodar o backend real) ---
+chroma_db/
+*.sqlite3
+*.sqlite
+
+# --- Cache de modelos baixados (sentence-transformers / HuggingFace) ---
+.cache/
+models/
+
+# --- VS Code (configs locais da máquina) ---
+.vscode/
+
+# --- Arquivos de sistema operacional ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Empacotamento / build do Python (caso surjam) ---
+build/
+dist/
+*.egg-info/
+pip-log.txt
+
+# OBS.: a pasta 02-rag-poc/outputs/ NÃO é ignorada de propósito —
+# resultados_retrieval.json e prompt_montado_exemplo_q5.txt são
+# evidência do exercício e devem ir pro repositório.
