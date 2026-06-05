@@ -36,6 +36,7 @@ def main():
 
     print(f"RETRIEVAL v2 — top-{N_RAW} -> rerank -> top-{N_FINAL}, gate tau={TAU}\n")
     hits = 0
+    results_v2 = []
     scored = [c for c in GOLD if c["expect"] is not None]
     for i, case in enumerate(GOLD, 1):
         raw = store.query(case["q"], n=N_RAW)
@@ -49,7 +50,7 @@ def main():
             cov = "n/a"
         else:
             n_ok = sum(1 for (d, s) in case["expect"]
-                       if any(sec_match(r.chunk, d, s) for r in ranked))
+                       if any(sec_match(r.chunk, d, s) for r in gated))
             cov = f"{n_ok}/{len(case['expect'])}"
             full = n_ok == len(case["expect"])
             hits += 1 if full else 0
@@ -59,8 +60,21 @@ def main():
         for r in ranked[:3]:
             print(f"        {r.score:+.3f} {r.chunk.doc_id} v{r.chunk.version} "
                   f"Sec {r.chunk.section} [{r.chunk.source_type}]")
-    print(f"\nRESUMO v2: {hits}/{len(scored)} cobertura COMPLETA "
+        results_v2.append({
+            "q": case["q"],
+            "status": status,
+            "covered": cov,
+            "trap": case["trap"],
+            "gated_top3": [(r.chunk.doc_id, r.chunk.section, round(r.score, 3))
+                           for r in gated[:3]],
+        })
+    print(f"\nRESUMO v2 (avaliação sobre gated): {hits}/{len(scored)} cobertura COMPLETA "
           f"(baseline era 3/{len(scored)})")
+    import os
+    os.makedirs("outputs", exist_ok=True)
+    with open("outputs/resultados_retrieval_v2.json", "w", encoding="utf-8") as f:
+        json.dump(results_v2, f, ensure_ascii=False, indent=2)
+    print("Artefato: outputs/resultados_retrieval_v2.json")
 
 
 if __name__ == "__main__":

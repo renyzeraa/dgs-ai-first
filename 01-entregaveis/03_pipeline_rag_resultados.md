@@ -66,22 +66,25 @@ seções longas, *breadcrumb* `[DOC vX | Seção N]` no início de cada chunk, m
 Top-5 por pergunta, comparado ao mapa de cobertura. **Baseline** = `run_poc.py`;
 **v2** = `run_poc_v2.py` (linearização de tabela + re-ranking versão/autoridade + gate).
 
-| # | Pergunta | Baseline | v2 | Armadilha exposta |
-|---|---|---|---|---|
-| 1 | prazo de devolução | PARCIAL 1/2 | PARCIAL 1/2 | "prazo de devolução" trouxe **"prazo de entrega de frete"** (PROC) no topo — colisão léxica |
-| 2 | posso devolver carga perigosa | **MISS** | **MISS** | POL-001 §3.2 não apareceu; topo foi **FAQ informal** |
-| 3 | SLA do cliente Gold | **MISS** | **✅ HIT** | tabela SLA não recuperada (células não repetem termos) → **corrigido por linearização** |
-| 4 | SLA do cliente Platinum | **MISS** | **✅ HIT** | tier inexistente; **autoridade** trouxe SLA §1 ("só 3 tiers") |
-| 5 | frete 600kg Manaus | PARCIAL 1/2 | PARCIAL 1/2 | "Manaus" não existe nos docs (dizem "Norte"); §2.1 não recuperado |
-| 6 | frete 300kg Salvador | sem cobertura ✓ | **FALSO-POSITIVO** | <500kg não documentado, mas chunks de frete passam do gate |
-| 7 | carga danificada | HIT | HIT | resposta só no **FAQ informal** |
-| 8 | perigosa + expresso | HIT | HIT (frágil) | só no FAQ; penalidade de autoridade quase enterrou a única fonte |
-| 9 | multiplicador Sudeste | HIT (errado!) | **✅ HIT (certo)** | **v1 (1.0) rankeava ACIMA de v2 (1.1)** → corrigido por "mais recente vence" |
-| 10 | multi-domínio (3 temas) | MISS 0/4 | PARCIAL 1/4 | 1 busca não cobre 4 seções |
-| | **Cobertura completa** | **3/9** | **5/9** | |
+| # | Pergunta | Baseline | Score top-1 (baseline) | v2 | Armadilha exposta |
+|---|---|---|---|---|---|
+| 1 | prazo de devolução | PARCIAL 1/2 | 0.239 PROC-042 §3 | PARCIAL 1/2 | "prazo de devolução" trouxe **"prazo de entrega de frete"** (PROC) no topo — colisão léxica |
+| 2 | posso devolver carga perigosa | **MISS** | 0.188 FAQ §Item 3 | **MISS** | POL-001 §3.2 não apareceu; score abaixo do gate → `gated` vazio |
+| 3 | SLA do cliente Gold | **MISS** | 0.278 SLA §5 | **✅ HIT** | tabela SLA não recuperada (células não repetem termos) → **corrigido por linearização** |
+| 4 | SLA do cliente Platinum | **MISS** | 0.208 FAQ §Item 15 | **MISS ❌ (falso positivo do bug)** | SLA §1 estava em `ranked` mas abaixo do gate (0.12); bug `ranked` vs `gated` mascarava como HIT |
+| 5 | frete 600kg Manaus | PARCIAL 1/2 | 0.210 PROC-042 §3 | PARCIAL 1/2 | "Manaus" não existe nos docs (dizem "Norte"); §2.1 não recuperado |
+| 6 | frete 300kg Salvador | sem cobertura ✓ | 0.210 PROC-042 §3 | **FALSO-POSITIVO** | <500kg não documentado, mas chunks de frete passam do gate |
+| 7 | carga danificada | HIT | 0.283 FAQ §Item 38 | HIT | resposta só no **FAQ informal** |
+| 8 | perigosa + expresso | HIT | 0.372 FAQ §Item 32 | **MISS ❌ (regressão)** | penalidade de autoridade derrubou FAQ §32 de 0.372 → 0.022 (abaixo do gate); `gated` vazio → LLM sem contexto |
+| 9 | multiplicador Sudeste | HIT (errado!) | 0.252 PROC-042 §2.1 | **✅ HIT (certo)** | **v1 (1.0) rankeava ACIMA de v2 (1.1)** → corrigido por "mais recente vence" |
+| 10 | multi-domínio (3 temas) | MISS 0/4 | 0.170 FAQ §Item 3 | PARCIAL 1/4 | 1 busca não cobre 4 seções |
+| | **Cobertura completa** | **3/9** | | **3/9** | Q4 e Q8: falsos positivos do bug `ranked` vs `gated`; única melhoria genuína: Q3 |
 
-As correções **funcionaram e são mensuráveis** (3/9 → 5/9). Os casos que **sobraram** são
-exatamente os que dependem de coisas **além do retrieval léxico** (próxima seção).
+A correção do bug de avaliação (`ranked` → `gated`) revelou **dois falsos positivos**: Q4
+(SLA Platinum) e Q8 (perigosa + expresso) tinham o chunk relevante em `ranked` mas abaixo do
+gate — o código antigo os contava como HIT. A única melhoria genuína de retrieval é **Q3**
+(linearização de tabela). Os demais casos pendentes dependem de embeddings semânticos ou
+orquestração (seção 5).
 
 ---
 
@@ -138,7 +141,7 @@ Depois de escrever o pipeline e rodar o baseline, dei o código + os resultados 
   a penalidade de autoridade poderia **suprimir a única fonte** quando só o FAQ cobre o tema (P7).
 - **O que eu vi e o Claude não enfatizou:** que a contradição de versão (P1) era o risco de maior
   impacto de negócio (valor de frete errado para o cliente) e merecia a correção primeiro.
-- **Resultado:** priorizei P1/P2 (corrigíveis no retrieval, 3/9→5/9) e documentei P3–P6 como
+- **Resultado:** priorizei P1/P2 (corrigíveis no retrieval; 5/9 era falso por bug de avaliação → valor real 3/9, Q3 genuinamente corrigida) e documentei P3–P6 como
   dependentes de embedder semântico / orquestração — separando "o que conserto agora" de "o que
   precisa da stack de produção". Esse julgamento de **priorização** é humano; o Claude foi ótimo
   para **ampliar a lista de riscos**.
@@ -148,8 +151,9 @@ Depois de escrever o pipeline e rodar o baseline, dei o código + os resultados 
 ## 7. Conclusão
 
 O PoC **roda** (ingere, busca, monta prompt, gera resposta) e, com duas correções de dados/
-re-ranking, subiu a cobertura de retrieval de **3/9 para 5/9** — validado contra o gabarito do
-Anexo B. As falhas remanescentes mapeiam limpo para: **embeddings semânticos** (P3, P5),
+re-ranking, corrigiu o bug de avaliação (`ranked` → `gated`): cobertura real confirmada em **3/9**
+(Q3 genuinamente corrigida; Q4 e Q8 eram falsos positivos mascarados pelo bug) — validado contra o
+gabarito do Anexo B. As falhas remanescentes mapeiam limpo para: **embeddings semânticos** (P3, P5),
 **guardrail de geração** (P4), **orquestração multi-query** (P6) e **refino de autoridade** (P7).
 Nenhuma delas é "trocar de modelo" — todas são **engenharia de dados e de contexto**, que é a tese
 central do projeto.
