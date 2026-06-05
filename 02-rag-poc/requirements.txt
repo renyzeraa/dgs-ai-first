@@ -1,0 +1,26 @@
+# =====================================================================
+# Dependencias da PoC de RAG - Assistente NovaTech (Fase 1 / Desenvolvedor)
+# =====================================================================
+#
+# O pipeline tem DOIS backends e escolhe sozinho qual usar:
+#
+#  - BACKEND REAL (producao / com internet):
+#       sentence-transformers  -> embeddings semanticos (all-MiniLM-L6-v2)
+#       chromadb               -> vector store persistente
+#
+#  - BACKEND FALLBACK (offline / sem download de modelo):
+#       scikit-learn           -> embeddings TF-IDF
+#       numpy                  -> similaridade de cosseno
+#
+# Para rodar a PoC "de verdade" com embeddings semanticos, instale tudo.
+# Se sentence-transformers/chromadb nao estiverem disponiveis, o codigo
+# cai automaticamente no fallback TF-IDF (que so precisa de sklearn+numpy).
+# A MECANICA do RAG e identica nos dois; muda a qualidade do retrieval.
+
+# --- backend real (recomendado) ---
+sentence-transformers>=2.7.0
+chromadb>=0.5.0
+
+# --- backend fallback (sempre necessario; sklearn puxa numpy) ---
+scikit-learn>=1.3.0
+numpy>=1.24.0
