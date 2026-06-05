@@ -1,10 +1,17 @@
 # Exercício 1.3 — Pipeline de RAG (PoC funcional) — Resultados e Análise
 
-**Papel:** Desenvolvedor · **Ferramentas:** Claude (chat) + estilo GitHub Copilot (código)
+**Papel:** Desenvolvedor · **Ferramentas:** Claude (chat) · GitHub Copilot (indisponível no ambiente — ver nota abaixo)
 **Tópicos aplicados:** RAG · Engenharia de Contexto · Engenharia de Prompt
 **Código:** `novatech_rag.py` (pipeline), `run_poc.py` (baseline), `run_poc_v2.py` (com correções)
 
 ---
+
+> **Ressalva — GitHub Copilot:** O enunciado prevê GitHub Copilot como ferramenta auxiliar
+> de código. Durante a execução deste exercício o Copilot não estava disponível no ambiente
+> (sem licença ativa). O código foi inteiramente gerado via Claude (chat), usando o mesmo
+> modelo de "par de revisão" descrito na seção 6. Não há evidência de uso do Copilot a
+> apresentar. Esta ressalva substitui o rótulo anterior "estilo GitHub Copilot" que era
+> impreciso e poderia induzir o avaliador a supor uso real da ferramenta.
 
 ## 1. Arquitetura (3 etapas) e nota de backend
 
