@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.env
+
+# logs de runtime, mas preservar as evidências de execução da entrega
+*.log
+!02-evidencias/*.log
