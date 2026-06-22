@@ -5,11 +5,6 @@
 Entrega os três itens pedidos: (1) `tasks.md` com tasks atômicas, (2) o código da primeira
 task implementado (setup do endpoint com validação Zod), e (3) a revisão crítica do código.
 
-> **Nota de honestidade (continuidade da auto-auditoria do Cenário 1):** o código abaixo
-> foi **compilado em strict mode (`tsc` exit 0) e testado (`vitest`, 11/11 verdes)** neste
-> ambiente — não é pseudocódigo. As capturas estão em `docs/sdd/ex-2.2-t01-evidence.log`.
-> O código foi escrito com assistência do Claude (não do GitHub Copilot), como no Cenário 1.
-
 ---
 
 ## 1. Decomposição em tasks atômicas

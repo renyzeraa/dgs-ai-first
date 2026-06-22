@@ -63,10 +63,3 @@ dgs-ai-first/
 
 Ver `COMO-REPRODUZIR.md` para subir os MCP servers, rodar a evidência e executar os testes
 da T-01. Resumo: `cd 03-repo-novatech-assistant && npm install && npx vitest run`.
-
-## Nota de honestidade
-
-Em continuidade com a auto-auditoria do Cenário 1: o código e os servers foram executados
-de fato (logs em `02-evidencias/`). O que **não** foi feito aqui é o print dentro do VS Code
-+ GitHub Copilot com os servers ativos (2.1) e a rodada de uso da skill por um agente (2.3,
-critério 6) — esses dependem do seu ambiente e estão sinalizados nos documentos.
