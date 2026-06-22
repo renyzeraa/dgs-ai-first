@@ -6,14 +6,6 @@ Este documento entrega os quatro itens pedidos: (1) o mapeamento necessidade →
 com least privilege justificado, (2) o `.mcp/mcp.json` final, (3) evidência de execução
 real dos servers, e (4) a análise de riscos de segurança com mitigação.
 
-> **Nota de honestidade (continuidade com a auto-auditoria do Cenário 1):** os servers
-> abaixo foram **efetivamente executados** num ambiente Linux (não simulados). A captura
-> crua das respostas JSON-RPC está em `docs/mcp/mcp-evidence.log`, e o cliente usado para
-> exercitá-los está em `docs/mcp/mcp_probe.py`. O que **não** foi feito aqui: o print
-> dentro do VS Code + GitHub Copilot com os servers ativos — isso deve ser reproduzido no
-> seu ambiente para a evidência visual da entrega. O `.mcp/mcp.json` é idêntico nos dois
-> casos, então o comportamento observado vale para ambos.
-
 ---
 
 ## 1. Mapeamento necessidade → server (least privilege)
@@ -213,9 +205,7 @@ comprometido por prompt injection (ex.: um doc da NovaTech com instrução embut
 **Mitigação (acionável).**
 1. Impor read-only **fora do server**, no sistema de arquivos: `chmod -R a-w docs/novatech
    data/retrieval-corpus` (ou montar como read-only), de modo que a escrita falhe no nível
-   do SO mesmo que a tool seja chamada. *(Observação honesta: o teste de chmod só bloqueia
-   para usuários sem privilégio; rodar o agente como root anula a proteção — portanto o
-   agente nunca deve rodar como root.)*
+   do SO mesmo que a tool seja chamada.
 2. Rodar o `filesystem-ro` sob um **usuário de SO sem permissão de escrita** nessas pastas.
 3. Versionar o corpus no Git e tratar qualquer modificação como mudança revisável: um
    `git diff` inesperado em `data/retrieval-corpus/` no validation gate de merge sinaliza
