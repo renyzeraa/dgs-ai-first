@@ -1,0 +1,20 @@
+# Evidência — Ex 3.1 harness de código (structured output + guardrails)
+# Capturado em: 2026-06-22T19:42:27Z  ·  node v22.22.2
+
+## tsc -p . --noEmit (strict)
+exit 0 — sem erros
+
+## vitest run (suíte response-validator)
+ RUN  v2.1.9 /home/claude/work/Anexo-D-starter-repo-novatech-assistant/novatech-assistant
+
+{"level":"warn","msg":"resposta rejeitada pelo harness","reason":"schema_invalido: source_document: Required; confidence_score: Required","time":1782157351465}
+{"level":"warn","msg":"resposta rejeitada pelo harness","reason":"guardrail_source_document_ausente","time":1782157351467}
+{"level":"warn","msg":"resposta rejeitada pelo harness","reason":"schema_invalido: source_document: source_document é obrigatório","time":1782157351467}
+{"level":"warn","msg":"resposta bloqueada pelo harness","reason":"guardrail_carga_perigosa_devolucao","time":1782157351468}
+{"level":"warn","msg":"resposta bloqueada pelo harness","reason":"guardrail_carga_perigosa_devolucao","time":1782157351469}
+ ✓ tests/unit/response-validator.test.ts (11 tests) 10ms
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  19:42:31
+   Duration  369ms (transform 72ms, setup 0ms, collect 73ms, tests 10ms, environment 0ms, prepare 91ms)

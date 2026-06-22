@@ -1,0 +1,18 @@
+# Evidência — Ex 3.2 revisão de código (feedback handler reescrito)
+# Capturado em: 2026-06-22T19:44:04Z  ·  node v22.22.2
+
+## tsc -p . --noEmit (strict)
+exit 0 — sem erros
+
+## vitest run (suíte feedback-handler)
+ RUN  v2.1.9 /home/claude/work/Anexo-D-starter-repo-novatech-assistant/novatech-assistant
+
+{"level":"info","msg":"feedback salvo","queryId":"3f2504e0-4f89-41d3-9a0c-0305e82c3301","rating":5,"id":"abc-123","time":1782157448903}
+{"level":"warn","msg":"feedback rejeitado por validação","issues":["queryId: queryId deve ser um UUID","rating: Number must be less than or equal to 5","attendantEmail: attendantEmail inválido"],"time":1782157448906}
+{"level":"error","msg":"falha ao persistir feedback","queryId":"3f2504e0-4f89-41d3-9a0c-0305e82c3301","time":1782157448907}
+ ✓ tests/unit/feedback-handler.test.ts (4 tests) 9ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  19:44:08
+   Duration  372ms (transform 76ms, setup 0ms, collect 78ms, tests 9ms, environment 0ms, prepare 93ms)
