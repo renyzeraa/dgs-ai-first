@@ -1,0 +1,26 @@
+// Wire-up Azure Functions v4 — referência (requer @azure/functions e @azure/cosmos instalados).
+// Mantido como .txt para não quebrar o build dos testes nesta fase (sem essas deps).
+// Quando as deps existirem, renomeie para azure-wireup.ts.
+//
+// import { app, HttpRequest, HttpResponseInit } from "@azure/functions";
+// import { CosmosClient } from "@azure/cosmos";
+// import { handleFeedback, type FeedbackRepository, type FeedbackRecord } from "./handler.js";
+//
+// const client = new CosmosClient(process.env.COSMOS_CONNECTION_STRING ?? "");
+// const container = client.database("novatech").container("feedbacks");
+// const repo: FeedbackRepository = {
+//   async create(record: FeedbackRecord) {
+//     const { resource } = await container.items.create(record);
+//     return { id: String(resource?.id) };
+//   },
+// };
+//
+// app.http("feedback", {
+//   methods: ["POST"],
+//   authLevel: "function",
+//   handler: async (request: HttpRequest): Promise<HttpResponseInit> => {
+//     const raw: unknown = await request.json();
+//     const result = await handleFeedback(raw, repo);
+//     return { status: result.status, jsonBody: result.body };
+//   },
+// });
