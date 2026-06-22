@@ -1,99 +1,58 @@
-# Fase 1 — Papel Desenvolvedor · Cenário NovaTech
+# Fase 3 — Governança e Validação · Papel Desenvolvedor · NovaTech Assistant
 
-Este repositório contém a resolução dos 3 exercícios do papel **Desenvolvedor** da Fase 1
-da trilha **AI First** (DGS / DB1).
+Entregáveis do **Cenário 3 (Governança)** do AI First (DGS/DB1), papel **Desenvolvedor**.
+Tópicos: **Harness Engineering** (structured outputs + verificações determinísticas) e
+**Revisão Crítica de Outputs de IA**.
 
-O cenário é a **NovaTech**, uma transportadora que quer um assistente de IA capaz de
-responder perguntas dos atendentes usando a própria documentação interna da empresa.
+> **Stack:** TypeScript strict, Zod, Vitest, pino. Tudo local — sem Azure/GitHub nesta fase.
 
----
+## Os 2 exercícios
 
-## O que tem aqui
+| # | Exercício | Entregável principal | Roda de verdade? |
+|---|-----------|----------------------|------------------|
+| 3.1 | **Harness de código** — structured output + 2 guardrails | schema Zod + `response-validator.ts` + code review | Sim — `tsc` strict + 11 testes |
+| 3.2 | **Revisão de código de IA** — feedback handler | revisão dupla + handler reescrito segundo AGENTS.md | Sim — `tsc` strict + 4 testes |
+
+Suíte completa: **26 testes verdes**, cobertura ~97% nos módulos implementados.
+
+### 3.1 — Structured output e guardrails determinísticos
+`src/services/response-validator.ts`: schema Zod `{ answer, source_document, confidence_score }`
+com `.strict()`, mais 2 guardrails que **bloqueiam** (trocam por fallback seguro, não só
+logam): (1) `source_document` obrigatório; (2) devolução de carga perigosa sem a negativa
+exigida (POL-001 §3.2). O code review pegou 2 problemas reais — schema sem `.strict()` e um
+falso positivo no regex que bloqueava a resposta CORRETA — ambos corrigidos.
+
+### 3.2 — Revisão crítica do feedback handler
+Revisão dupla (pessoa + Claude) do handler gerado por IA, pegando os 4 problemas exigidos
+(`as any` sem Zod, `console.log`, `require` dinâmico, e-mail logado) e mais alguns. Reescrito
+em `src/functions/feedback/handler.ts` com Zod, pino, imports estáticos, persistência atrás de
+porta injetável, e um teste que **garante que o e-mail do atendente nunca vai para o log**.
+
+## Estrutura
 
 ```
-├── 01-entregaveis/          # respostas dos 3 exercícios
-│   ├── 01_analise_viabilidade_tecnica.md
-│   ├── 02_system_prompt_e_testes.md
-│   └── 03_pipeline_rag_resultados.md
-│
-├── 02-rag-poc/              # código que roda de verdade
-│   ├── novatech_rag.py      # o pipeline de RAG (ingestão, busca, montagem de prompt)
-│   ├── run_poc.py           # execução baseline
-│   ├── run_poc_v2.py        # execução com correções
-│   ├── docs/                # os 5 documentos da NovaTech (corpus)
-│   └── outputs/             # resultados gerados
-│
-└── 03-referencia-cenario/   # enunciados e gabarito original
-    ├── exercicio-fase-1-entendimento.md
-    ├── anexo-a-documentacao-simulada-novatech.md
-    └── anexo-b-chunks-referencia-rag.md
+fase-3-desenvolvedor-novatech/
+├── 01-entregaveis/
+│   ├── 01_ex-3.1_structured-output-guardrails.md
+│   └── 02_ex-3.2_revisao-codigo-feedback.md
+├── 02-evidencias/
+│   ├── ex-3.1_evidence.log
+│   └── ex-3.2_evidence.log
+├── 03-repo-novatech-assistant/        # starter repo MODIFICADO (cenários 2 + 3)
+│   ├── src/services/response-validator.ts   ← 3.1
+│   ├── src/shared/logger.ts                 ← 3.1/3.2
+│   ├── src/functions/feedback/              ← 3.2 (handler + validator + wireup ref)
+│   └── tests/unit/                          ← suítes dos 2 exercícios
+├── COMO-REPRODUZIR.md
+└── README.md
 ```
 
----
-
-## Os 3 exercícios
-
-**Ex 1.1 — Análise de viabilidade**
-Avalia se vale a pena construir o assistente. Estima quantos tokens os documentos ocupam,
-qual o tamanho de janela de contexto necessário, quais os riscos e o que precisaria ser
-confirmado antes de começar.
-
-**Ex 1.2 — System prompt**
-Escreve e testa o prompt que instrui o assistente de como responder. Cobre casos de
-borda: o que fazer quando a informação não está nos docs, quando há duas versões
-contraditórias, quando a pergunta mistura assuntos.
-
-**Ex 1.3 — Pipeline de RAG**
-Constrói e mede um pipeline que busca os trechos certos nos documentos antes de montar
-a resposta. Os resultados são medidos contra um gabarito (Anexo B) que diz qual trecho
-deveria ter sido encontrado para cada pergunta.
-
----
-
-## Como rodar
+## Reproduzir (resumo)
 
 ```bash
-cd 02-rag-poc
-
-# instala as dependências
-pip install -r requirements.txt
-
-# baseline: como estava antes das correções
-python run_poc.py
-
-# versão corrigida
-python run_poc_v2.py
+cd 03-repo-novatech-assistant
+npm install
+npx tsc -p . --noEmit      # exit 0
+npx vitest run             # 26 passed (26)
 ```
-
-Se o `sentence-transformers` não estiver disponível, o pipeline cai automaticamente para
-um backend TF-IDF (mais simples, funciona offline). A saída informa qual backend foi usado.
-
----
-
-## Resultados
-
-O gabarito tem 9 perguntas com resposta esperada (a 10ª não tem cobertura nos documentos
-— é uma armadilha para testar se o assistente inventa ou admite que não sabe).
-
-| Versão | Perguntas com tudo certo |
-|---|---|
-| Baseline (`run_poc.py`) | 3/9 |
-| Com correções (`run_poc_v2.py`) | 3/9 |
-
-O número ficou igual, mas a composição mudou:
-
-- **Q3 (SLA Gold): MISS → HIT** — a tabela de SLA não era recuperada porque as células
-  não repetiam os termos da pergunta. A correção foi linearizar a tabela na ingestão
-  (transformar cada linha em texto corrido).
-
-- **Q8 (carga perigosa + expresso): HIT → MISS** — a penalidade aplicada a fontes
-  informais (FAQ) foi longe demais: derrubou o único documento que cobria o assunto.
-  O problema está documentado como P7 e tem correção proposta.
-
-- **Q4 (SLA Platinum): era falso positivo** — o baseline contava como acerto porque
-  o chunk aparecia na lista de candidatos, mas com score abaixo do limiar mínimo de
-  relevância. Corrigido.
-
-Os problemas que ficaram abertos (vocabulário diferente do usuário vs. documento,
-perguntas sobre múltiplos assuntos de uma vez) estão mapeados no entregável 1.3 com
-as correções necessárias — nenhuma delas é "trocar de modelo".
+Detalhes em `COMO-REPRODUZIR.md`.
