@@ -7,11 +7,6 @@ quem cria, quem consome e frequência de uso; (2) a `SKILL.md` completa da
 `azure-functions-endpoint` (Domain level) — em `skills/domain/azure-functions-endpoint.md`;
 e (3) os critérios para "skill madura".
 
-> **Nota de honestidade:** os exemplos DO/DON'T da skill `azure-functions-endpoint` foram
-> derivados do **código real da T-01** (Ex 2.2), que compila em strict mode e passa nos 11
-> testes Vitest. Não são trechos hipotéticos — saíram de `src/functions/query/validator.ts`
-> e `src/shared/errors.ts`.
-
 ---
 
 ## 1. Árvore de skills

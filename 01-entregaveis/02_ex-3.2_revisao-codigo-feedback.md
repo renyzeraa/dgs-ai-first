@@ -24,14 +24,6 @@ tabela reconcilia as duas listas. Classificação: **[AGENTS]** violação do AG
 | 7 | Retorna `body: 'OK'` (texto) em vez de JSON, e status 200 em vez de 201 (criação) | [BUG] | — | ✓ | Só Claude |
 | 8 | Acoplamento ao Cosmos impede teste sem serviço real | [BUG] | ✓ | parcial | Pessoa enfatizou |
 
-**Comparação honesta.** Os 4 problemas que o critério de avaliação exige (itens 1, 2, 3, 4)
-foram pegos por ambos os revisores, sem divergência. As diferenças foram de profundidade, não
-de conflito: o Claude detalhou melhor o custo de instanciar o `CosmosClient` por request (#6)
-e foi o único a notar o `body: 'OK'`/status 200 (#7), enquanto o revisor pessoa foi quem mais
-insistiu no acoplamento que impede teste (#8) — o que guiou a decisão de injetar o
-repositório. Não houve "problema inventado": cada item aponta para uma linha concreta do
-código original.
-
 ## 3. Módulo reescrito (segue o AGENTS.md)
 
 Decisões da reescrita, mapeadas aos problemas:
