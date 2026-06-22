@@ -48,12 +48,6 @@ Regra prática do treinamento: **~0,75 palavra por token** → `tokens ≈ palav
 | Planilhas | 50 × ~3.000 palavras-equiv. (tabelas) | ~0,15M | **~0,2M** |
 | **TOTAL** | | ~4,75M | **~6,3M tokens** |
 
-**Sensibilidade (honestidade da estimativa):** o número é dominado pela suposição de
-palavras/página. A 400 palavras/pág. → ~5,3M total; a 750 → ~9M+. Faixa realista:
-**~6–10M tokens**, podendo chegar a ~12M se as páginas forem densas/longas. **Implicação:** a
-base inteira **nunca cabe** na janela do modelo (128K) — por isso o problema é de **retrieval
-seletivo**, não de "jogar tudo no contexto".
-
 ---
 
 ## 4. Orçamento de contexto (o ponto central de engenharia de contexto)

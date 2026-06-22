@@ -39,3 +39,6 @@ pip-log.txt
 # OBS.: a pasta 02-rag-poc/outputs/ NÃO é ignorada de propósito —
 # resultados_retrieval.json e prompt_montado_exemplo_q5.txt são
 # evidência do exercício e devem ir pro repositório.
+
+node_modules
+coverage

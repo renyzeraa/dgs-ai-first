@@ -102,15 +102,14 @@ orquestração (seção 5).
 > A mesma pergunta, mesmo modelo, mesmo prompt — **o que mudou foi o retrieval**. Geração boa com
 > contexto errado = resposta errada confiante.
 
-### Caso B — "Quanto custa o frete para 600kg para Manaus?" (mostra recusa honesta)
+### Caso B — "Quanto custa o frete para 600kg para Manaus?"
 
 - **Contexto v2 recuperado:** fórmula (v2 §2) + prazo (v2 §3) + objetivo (v2 §1). **Faltam** a
   tarifa-base e a tabela de multiplicadores (§2.1 não foi recuperada).
 - **Resposta v2:** *"Não consigo informar o valor: a documentação recuperada traz a fórmula
   (valor base × multiplicador regional × fator de peso) e o fator de peso 1.0 para 500–1.000 kg,
   mas **não traz a tarifa-base nem o multiplicador da região**. Consulte a tabela mensal de
-  tarifas ou escale ao supervisor. Fonte: (PROC-042-v2 v2.0, Seção 2)."* ✅ recusa honesta
-  (guardrail "informação parcial"), **sem inventar valor**.
+  tarifas ou escale ao supervisor. Fonte: (PROC-042-v2 v2.0, Seção 2)."
 
 > Mas isso também revela um **bug de retrieval**: §2.1 (Norte = 1.8) **deveria** ter sido
 > recuperado. A qualidade da geração é **limitada pela qualidade do retrieval**.

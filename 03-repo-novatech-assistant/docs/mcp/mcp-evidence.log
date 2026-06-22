@@ -1,0 +1,84 @@
+# Evidência de execução — MCP servers (Ex 2.1 Desenvolvedor)
+# Capturado em: 2026-06-19T00:09:42Z
+# Ambiente: sandbox Linux (node v22.22.2, python 3.12.3, git 2.43.0)
+# Repositório: novatech-assistant (Anexo D), commit bbdd03a
+# Cliente MCP: mcp_probe.py (stdio + JSON-RPC 2.0, protocolVersion 2024-11-05)
+
+======================================================================
+SERVER: filesystem  (escopo least-privilege aplicado nos args)
+======================================================================
+
+--- initialize -> serverInfo ---
+{
+  "name": "secure-filesystem-server",
+  "version": "0.2.0"
+}
+
+Tools expostas: ['read_file', 'read_text_file', 'read_media_file', 'read_multiple_files', 'write_file', 'edit_file', 'create_directory', 'list_directory', 'list_directory_with_sizes', 'directory_tree', 'move_file', 'search_files', 'get_file_info', 'list_allowed_directories']
+
+--- tools/call list_directory docs/novatech ---
+"[FILE] FAQ-atendimento.md\n[FILE] POL-001-politica-devolucao.md\n[FILE] PROC-042-frete-especial-v1.md\n[FILE] PROC-042-v2-frete-especial-revisado.md\n[FILE] README.md\n[FILE] SLA-2024-tabela-sla-clientes.md"
+
+--- tools/call read_text_file SLA-2024 (primeiras linhas) ---
+"# SLA-2024 — Tabela de SLA por Tipo de Cliente\n\n**Versão:** 2024.1\n**Última atualização:** 02/01/2024\n**Responsável:** Diretoria Comercial + Diretoria de Operações\n**Classificação:** Documento contratual — os SLAs listados aqui são compromissos formais com o cliente\n\n## 1. Classificação de clientes\n\nA NovaTech classifica seus clientes em 3 (três) tiers com base no volume mensal de operações e no valor do contrato:\n\n| Tier | Critério de elegibilidade | Revisão |"
+
+--- tools/call read_text_file AGENTS.md (FORA do escopo -> deve falhar) ---
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Access denied - path outside allowed directories: /home/claude/work/Anexo-D-starter-repo-novatech-assistant/novatech-assistant/AGENTS.md not in /home/claude/work/Anexo-D-starter-repo-novatech-assistant/novatech-assistant/src, /home/claude/work/Anexo-D-starter-repo-novatech-assistant/novatech-assistant/specs, /home/claude/work/Anexo-D-starter-repo-novatech-assistant/novatech-assistant/skills, /home/claude/work/Anexo-D-starter-repo-novatech-assistant/novatech-assistant/docs/novatech, /home/claude/work/Anexo-D-starter-repo-novatech-assistant/novatech-assistant/data/retrieval-corpus"
+    }
+  ],
+  "isError": true
+}
+
+======================================================================
+SERVER: filesystem  ->  RECUPERAR CHUNK (gabarito Anexo B)
+======================================================================
+
+--- tools/call search_files pattern=Gold ---
+"No matches found"
+
+--- Chunk recuperado p/ 'Qual o SLA do cliente Gold?' (esperado: SLA-2024-B) ---
+"**Chunk SLA-2024-B** — Seção 2: Tabela de SLAs (chamados gerais)\n> SLAs para chamados gerais — Gold: resposta em até 2h úteis, resolução em até 24h úteis. Silver: resposta em até 4h úteis, resolução em até 48h úteis. Standard: resposta em até 8h úteis, resolução em até 72h úteis.\n"
+
+======================================================================
+SERVER: git  (repositorio local, read-only de historico)
+======================================================================
+
+--- initialize -> serverInfo ---
+{
+  "name": "mcp-git",
+  "version": "1.28.0"
+}
+
+Tools expostas: ['git_status', 'git_diff_unstaged', 'git_diff_staged', 'git_diff', 'git_commit', 'git_add', 'git_reset', 'git_log', 'git_create_branch', 'git_checkout', 'git_show', 'git_branch']
+
+--- tools/call git_log ---
+"Commit history:\nCommit: 'bbdd03aeecd7e349a2bfc93849e0552a0b766ac6'\nAuthor: <git.Actor \"Trilha AI First <trilha@db1.local>\">\nDate: 2026-06-09 18:13:30+00:00\nMessage: 'chore: starter repo (Anexo D) — estrutura + dados semeados dos Anexos A e B\\n'\n"
+
+--- tools/call git_status ---
+"Repository status:\nOn branch master\nnothing to commit, working tree clean"
+
+======================================================================
+SERVER: memory  (grafo persistente de decisoes / linguagem ubiqua)
+======================================================================
+
+Tools expostas: ['create_entities', 'create_relations', 'add_observations', 'delete_entities', 'delete_observations', 'delete_relations', 'read_graph', 'search_nodes', 'open_nodes']
+
+--- tools/call create_entities ---
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "[]"
+    }
+  ],
+  "structuredContent": {
+    "entities": []
+  }
+}
+
+--- tools/call read_graph ---
+"{\n  \"entities\": [\n    {\n      \"name\": \"carga perigosa\",\n      \"entityType\": \"linguagem-ubiqua\",\n      \"observations\": [\n        \"Sempre significa classes 1-6 da ANTT (Res. 5.947/2021)\",\n        \"NAO elegivel para devolucao pelo processo padrao (POL-001-B)\"\n      ]\n    },\n    {\n      \"name\": \"ADR-0002\",\n      \"entityType\": \"decisao\",\n      \"observations\": [\n        \"Context budget: ~4K system + ~8K chunks (5 chunks ~1.5K)\"\n      ]\n    }\n  ],\n  \"relations\": []\n}"
